@@ -1,0 +1,185 @@
+﻿@model RapidApiBooking.Models.HotelDetailViewModel
+@{
+    Layout = null;
+
+    if (Model.Photos == null)
+    {
+        Model.Photos = new List<string>();
+    }
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <title>Deluxe - Otel Detayı</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/deluxe-master/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/animate.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/aos.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/flaticon.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/icomoon.css">
+    <link rel="stylesheet" href="~/deluxe-master/css/style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/Otel/Index">Deluxe</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
+                <span class="oi oi-menu"></span> Menü
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="/Otel/Index" class="nav-link">Ana Sayfa</a></li>
+                    <li class="nav-item active"><a href="#" class="nav-link">Otel Detayı</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- FOTOĞRAF SLIDER -->
+    <section class="home-slider owl-carousel">
+
+        @if (Model.Photos.Any())
+        {
+            foreach (var photo in Model.Photos)
+            {
+                <div class="slider-item" style="background-image:url('@photo');">
+                    <div class="overlay"></div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="slider-item" style="background-image:url('/deluxe-master/images/bg_1.jpg');">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row slider-text justify-content-center align-items-center">
+                        <div class="col-md-12 text-center">
+                            <h1 class="mb-3">Fotoğraf Bulunamadı</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </section>
+
+    <!-- OTEL AÇIKLAMASI -->
+    <section class="ftco-section">
+        <div class="container">
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-10 text-center heading-section ftco-animate">
+                    <span class="subheading">Otel Detayları</span>
+                    <h2 class="mb-4">Otel Hakkında</h2>
+
+                    <p class="lead">
+                        @Html.Raw(string.IsNullOrWhiteSpace(Model.Description)
+                                                ? "Bu otel için açıklama bulunamadı."
+                                                : Model.Description)
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <a href="/Otel/Index" class="btn btn-primary py-3 px-5 mr-2">
+                        Diğer Otellere Dön
+                    </a>
+                    <a href="#" class="btn btn-success py-3 px-5">
+                        Rezervasyon Yap
+                    </a>
+                </div>
+            </div>
+
+            <!-- DEBUG -->
+            <div class="row mt-4">
+                <div class="col-md-12 text-center text-muted">
+                    <small>@Model.Photos.Count adet foto bulundu</small>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+                <div class="col-md-7 heading-section text-center ftco-animate">
+                    <h2 class="mb-4">Müsait Odalar</h2>
+                    <p>Konaklamanız için en uygun odayı seçin.</p>
+                </div>
+            </div>
+            <div class="row">
+                @if (Model.Rooms != null && Model.Rooms.Count > 0)
+                {
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <div class="col-md-4 ftco-animate">
+                            <div class="block-7">
+                                <div class="text-center p-4">
+                                    <span class="excerpt d-block">@room.Name</span>
+
+                                    <ul class="pricing-text mb-5">
+                                        <li><span class="price">@room.Price @room.Currency</span></li>
+                                        @if (room.Facilities.Count > 0)
+                                        {
+                                            @foreach (var facility in room.Facilities.Take(3))
+                                            {
+                                                <li><span class="icon-check mr-2"></span>@facility</li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li>Standart Özellikler</li>
+                                        }
+                                    </ul>
+
+                                    <a href="#" class="btn btn-primary d-block px-2 py-3">Seç</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-12 text-center">
+                        <p>Şu an için müsait oda bilgisi çekilemedi veya oda kalmadı.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+        <div class="container text-center">
+            <h2 class="ftco-heading-2">Deluxe Otel</h2>
+            <p>Konforun adresi.</p>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="~/deluxe-master/js/jquery.min.js"></script>
+    <script src="~/deluxe-master/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/deluxe-master/js/popper.min.js"></script>
+    <script src="~/deluxe-master/js/bootstrap.min.js"></script>
+    <script src="~/deluxe-master/js/owl.carousel.min.js"></script>
+    <script src="~/deluxe-master/js/aos.js"></script>
+    <script src="~/deluxe-master/js/main.js"></script>
+
+</body>
+</html>
