@@ -153,9 +153,6 @@ namespace RapidApiBooking.Controllers
             string apiCheckIn = !string.IsNullOrEmpty(checkInDate) ? checkInDate : DateTime.Now.ToString("yyyy-MM-dd");
             string apiCheckOut = !string.IsNullOrEmpty(checkOutDate) ? checkOutDate : DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 
-            // -------------------------------------------------------------
-            // 1. FOTOĞRAFLAR (API'den Çek + Bulamazsa Rastgele Ekle)
-            // -------------------------------------------------------------
             try
             {
                 var photoReq = new HttpRequestMessage
@@ -175,16 +172,24 @@ namespace RapidApiBooking.Controllers
                     {
                         foreach (var item in json.data)
                         {
-                            // Booking API'sinin tüm olası fotoğraf isimlerini dene
-                            string url = (string)item.url_max ??
-                                         (string)item.url_original ??
-                                         (string)item.url_1440 ??
-                                         (string)item.url_square60;
+                            // DÜZELTME BURADA:
+                            // Paylaştığın JSON'da veri "url" adıyla geliyor.
+                            // Kodun sadece "url" alanını okuması yeterli.
+                            string url = (string)item.url;
+
+                            // Eğer eski API formatı da gelirse diye yedek kontrol (isteğe bağlı):
+                            if (string.IsNullOrEmpty(url))
+                            {
+                                url = (string)item.url_max ?? (string)item.url_original;
+                            }
 
                             if (!string.IsNullOrEmpty(url))
                             {
+                                // URL içindeki {width} parametrelerini temizlemek gerekebilir ama
+                                // paylaştığın JSON'da linkler temiz görünüyor.
                                 model.Photos.Add(url);
                             }
+
                             if (model.Photos.Count >= 10) break;
                         }
                     }
@@ -230,20 +235,23 @@ namespace RapidApiBooking.Controllers
             }
             catch { }
 
-            // Eğer açıklama hala boşsa standart bir yazı ekle
+          
             if (string.IsNullOrEmpty(model.Description))
             {
                 model.Description = "Bu otel şehir merkezinde harika bir konuma sahiptir. Misafirlerine konforlu bir konaklama deneyimi sunan tesis, modern olanaklarla donatılmıştır. Resepsiyon 24 saat açıktır.";
             }
 
-            // -------------------------------------------------------------
-            // 3. ODALAR (API'den Çek + Fallback)
-            // -------------------------------------------------------------
+            // ... Önceki kodlar (Fotoğraf çekme vb.) aynı kalacak ...
+
+            // =========================================================================
+            // 3. ODA LİSTELEME (SENİN VIEWMODEL YAPINA GÖRE GÜNCELLENDİ)
+            // =========================================================================
             try
             {
                 var roomReq = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
+                    // Tarih formatının yyyy-MM-dd olduğundan emin oluyoruz
                     RequestUri = new Uri($"https://{_apiHost}/api/v1/hotels/getRoomListWithAvailability?hotel_id={id}&arrival_date={apiCheckIn}&departure_date={apiCheckOut}"),
                     Headers = { { "x-rapidapi-key", _apiKey }, { "x-rapidapi-host", _apiHost } }
                 };
@@ -252,33 +260,158 @@ namespace RapidApiBooking.Controllers
                 if (roomRes.IsSuccessStatusCode)
                 {
                     var body = await roomRes.Content.ReadAsStringAsync();
+
+                    // JSON'ı dinamik olarak çözüyoruz (Ekstra class oluşturmamak için)
                     dynamic json = JsonConvert.DeserializeObject(body);
 
-                    if (json.data != null)
+                    // Tüm odaları toplayacağımız geçici liste
+                    var allRawRooms = new List<dynamic>();
+
+                    // 1. MÜSAİT ODALARI EKLE
+                    if (json.data != null && json.data.available != null)
                     {
-                        var rooms = json.data;
-                        try { if (json.data.rooms != null) rooms = json.data.rooms; } catch { }
-
-                        foreach (var r in rooms)
+                        foreach (var r in json.data.available)
                         {
-                            // Özellikleri güvenli çek
-                            var facilities = new List<string>();
-                            try { if (r.facilities != null) foreach (var f in r.facilities) facilities.Add((string)f); } catch { }
-                            if (facilities.Count == 0) { facilities.Add("Wifi"); facilities.Add("TV"); facilities.Add("Klima"); }
-
-                            model.Rooms.Add(new RoomItemViewModel
-                            {
-                                Name = (string)r.name ?? "Standart Oda",
-                                Price = (string)r.price?.value?.ToString() ?? "Sorunuz",
-                                Currency = (string)r.price?.currency ?? "EUR",
-                                Facilities = facilities
-                            });
+                            allRawRooms.Add(r);
                         }
+                    }
+                    // Eğer API yapısı farklı gelirse diye yedek kontrol
+                    else if (json.available != null)
+                    {
+                        foreach (var r in json.available)
+                        {
+                            allRawRooms.Add(r);
+                        }
+                    }
+
+                    // 2. MÜSAİT OLMAYANLARI DA EKLE (Test için)
+                    // Normalde sadece 'available' gösterilir ama veri boş gelmesin diye ekliyoruz.
+                    // Fiyatları genelde null gelir.
+                    if (json.data != null && json.data.unavailable != null)
+                    {
+                        foreach (var r in json.data.unavailable)
+                        {
+                            allRawRooms.Add(r);
+                        }
+                    }
+                    else if (json.unavailable != null)
+                    {
+                        foreach (var r in json.unavailable)
+                        {
+                            allRawRooms.Add(r);
+                        }
+                    }
+
+                    // Bulunan ham verileri senin 'RoomItemViewModel' sınıfına çeviriyoruz
+                    foreach (var r in allRawRooms)
+                    {
+                        var roomModel = new RoomItemViewModel();
+
+                        // -- İSİM --
+                        roomModel.Name = (string)r.room_name ?? (string)r.name_without_policy ?? "Oda Tipi Belirtilmemiş";
+
+                        // -- FİYAT ÇÖZÜMLEME (API karışık formatlarda yollayabiliyor) --
+                        string rawPrice = "Tükendi";
+                        string rawCurrency = "EUR";
+
+                        try
+                        {
+                            // Öncelik 1: composite_price_breakdown
+                            if (r.composite_price_breakdown != null && r.composite_price_breakdown.gross_amount != null)
+                            {
+                                rawPrice = r.composite_price_breakdown.gross_amount.value.ToString();
+                                rawCurrency = r.composite_price_breakdown.gross_amount.currency ?? "EUR";
+                            }
+                            // Öncelik 2: price_breakdown
+                            else if (r.price_breakdown != null && r.price_breakdown.gross_price != null)
+                            {
+                                rawPrice = r.price_breakdown.gross_price.value.ToString();
+                                rawCurrency = r.price_breakdown.gross_price.currency ?? "EUR";
+                            }
+                            // Öncelik 3: product_price_breakdown (Bazen burada oluyor)
+                            else if (r.product_price_breakdown != null && r.product_price_breakdown.gross_amount != null)
+                            {
+                                rawPrice = r.product_price_breakdown.gross_amount.value.ToString();
+                                rawCurrency = r.product_price_breakdown.gross_amount.currency ?? "EUR";
+                            }
+                        }
+                        catch { /* Fiyat okurken hata olursa varsayılan kalır */ }
+
+                        // Fiyatı formatla (örn: 1250,50)
+                        if (double.TryParse(rawPrice, out double parsedPrice))
+                        {
+                            roomModel.Price = parsedPrice.ToString("N2");
+                        }
+                        else
+                        {
+                            roomModel.Price = rawPrice;
+                        }
+
+                        roomModel.Currency = rawCurrency;
+
+
+                        // -- ÖZELLİKLER (FACILITIES) --
+                        // 1. Metrekare
+                        if (r.room_surface_in_m2 != null)
+                        {
+                            roomModel.Facilities.Add($"{r.room_surface_in_m2} m²");
+                        }
+
+                        // 2. Yatak Bilgisi (bed_configurations dizisinden)
+                        try
+                        {
+                            if (r.bed_configurations != null)
+                            {
+                                foreach (var config in r.bed_configurations)
+                                {
+                                    if (config.bed_types != null)
+                                    {
+                                        foreach (var bed in config.bed_types)
+                                        {
+                                            string bedInfo = (string)bed.name_with_count;
+                                            if (!string.IsNullOrEmpty(bedInfo))
+                                                roomModel.Facilities.Add(bedInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch { }
+
+                        // 3. Ekstra Özellikler (facilities listesinden)
+                        try
+                        {
+                            if (r.facilities != null)
+                            {
+                                // Bazen string array, bazen object array gelebilir
+                                foreach (var f in r.facilities)
+                                {
+                                    roomModel.Facilities.Add(f.ToString());
+                                }
+                            }
+                        }
+                        catch { }
+
+                        // Liste boş kalmasın diye varsayılanlar
+                        if (roomModel.Facilities.Count == 0)
+                        {
+                            roomModel.Facilities.Add("Wifi");
+                            roomModel.Facilities.Add("Klima");
+                            roomModel.Facilities.Add("TV");
+                        }
+
+                        // Listeye ekle
+                        model.Rooms.Add(roomModel);
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                // Hata olursa boş geç, sayfa kilitlenmesin
+                // Loglama yapılabilir: System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
 
+            // ... Sonraki kodlar (return View(model)) aynı ...
             // Eğer hiç oda bulunamazsa (API boş dönerse) örnek bir oda göster
             if (model.Rooms.Count == 0)
             {
