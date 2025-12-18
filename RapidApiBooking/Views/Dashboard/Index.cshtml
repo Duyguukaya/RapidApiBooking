@@ -1,0 +1,507 @@
+﻿@model RapidApiBooking.Models.DashboardViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Briefing Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #112019;
+            --card-dark: #1b2e25;
+            --text-light: #e0e6e3;
+            --text-muted: #8fa39a;
+            --accent-green: #34d399;
+            --accent-red: #ef4444;
+            --fuel-icon: #f59e0b;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Custom */
+        .navbar-custom {
+            background-color: var(--card-dark);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px 30px;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #fff !important;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-green);
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background-color: var(--card-dark);
+            border-radius: 16px;
+            padding: 25px;
+            height: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: transform 0.2s ease;
+        }
+
+            .dashboard-card:hover {
+                transform: translateY(-2px);
+                border-color: rgba(52, 211, 153, 0.2);
+            }
+
+        .section-title {
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Market Watch */
+        .market-item {
+            background-color: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 15px;
+            transition: 0.2s;
+        }
+
+            .market-item:hover {
+                background-color: rgba(255,255,255,0.08);
+            }
+
+        .market-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .market-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 8px 0;
+            color: #fff;
+        }
+
+        .change-badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .bg-up {
+            background-color: rgba(52, 211, 153, 0.15);
+            color: var(--accent-green);
+        }
+
+        .bg-down {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+
+        /* Weather */
+        .weather-card {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .weather-temp {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-top: 10px;
+        }
+
+        .weather-icon-lg {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 8rem;
+            opacity: 0.15;
+            transform: rotate(-10deg);
+        }
+
+        /* Chef */
+        .chef-card {
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            position: relative;
+            background: linear-gradient(180deg, var(--card-dark) 0%, rgba(52, 211, 153, 0.05) 100%);
+        }
+
+        .chef-header {
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dish-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 25px;
+            padding-right: 100px;
+        }
+
+        .dish-highlight {
+            color: #fff;
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        .chef-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            right: 25px;
+            top: 60px;
+            border: 3px solid var(--card-dark);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* List Items (Fuel & Concierge) */
+        .list-row-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+            .list-row-item:hover {
+                background-color: rgba(255,255,255,0.08);
+                transform: translateX(5px);
+            }
+
+            .list-row-item:last-child {
+                margin-bottom: 0;
+            }
+
+        .fuel-price-tag {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        /* Concierge Specific */
+        .concierge-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .concierge-info h6 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .concierge-info p {
+            margin: 3px 0 0 0;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn-action {
+            background-color: transparent;
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+            .btn-action:hover {
+                background-color: var(--accent-green);
+                color: #112019;
+            }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar-custom d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-4">
+            <a class="navbar-brand" href="#"><i class="fa-solid fa-layer-group me-2"></i>DailyBriefing</a>
+            <div class="d-none d-md-flex gap-3 ms-4">
+                <a href="#" class="text-white text-decoration-none opacity-75 hover-opacity-100">Dashboard</a>
+                <a href="#" class="text-white text-decoration-none opacity-50 hover-opacity-100">Analytics</a>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3" style="cursor: pointer;">
+            <div class="text-end d-none d-sm-block">
+                <div style="font-weight: 600; font-size: 0.9rem;">Duygu Kaya</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Premium Member</div>
+            </div>
+            <img src="https://via.placeholder.com/150" alt="Profile" class="profile-img">
+            <i class="fa-solid fa-chevron-down text-muted" style="font-size: 0.8rem;"></i>
+        </div>
+    </nav>
+
+    <div class="container-fluid p-4" style="max-width: 1600px;">
+        <div class="row g-4">
+
+            <div class="col-lg-3">
+                <span class="section-title">Finance & Economy</span>
+
+                <div class="dashboard-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="m-0 fw-bold"><i class="fa-solid fa-chart-line me-2 text-success"></i>Market</h5>
+                        <i class="fa-solid fa-ellipsis text-muted"></i>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="market-item">
+                                <div class="d-flex justify-content-between">
+                                    <span class="market-label">USD</span><span class="text-success">$</span>
+                                </div>
+                                <div class="market-price">@Model.Market.UsdTry.Price ₺</div>
+                                <span class="change-badge @(Model.Market.UsdTry.IsUp ? "bg-up" : "bg-down")">
+                                    <i class="fa-solid @(Model.Market.UsdTry.IsUp ? "fa-arrow-trend-up" : "fa-arrow-trend-down")"></i> @Model.Market.UsdTry.ChangeRate%
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="market-item">
+                                <div class="d-flex justify-content-between">
+                                    <span class="market-label">EUR</span><span class="text-primary">€</span>
+                                </div>
+                                <div class="market-price">@Model.Market.EurTry.Price ₺</div>
+                                <span class="change-badge @(Model.Market.EurTry.IsUp ? "bg-up" : "bg-down")">
+                                    <i class="fa-solid @(Model.Market.EurTry.IsUp ? "fa-arrow-trend-up" : "fa-arrow-trend-down")"></i> @Model.Market.EurTry.ChangeRate%
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="market-item">
+                                <div class="d-flex justify-content-between">
+                                    <span class="market-label">GBP</span>
+                                    <span style="color: #a855f7; font-weight: bold;">£</span>
+                                </div>
+                                <div class="market-price">@Model.Market.GbpTry.Price ₺</div>
+                                <span class="change-badge @(Model.Market.GbpTry.IsUp ? "bg-up" : "bg-down")">
+                                    <i class="fa-solid @(Model.Market.GbpTry.IsUp ? "fa-arrow-trend-up" : "fa-arrow-trend-down")"></i> @Model.Market.GbpTry.ChangeRate%
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="market-item">
+                                <div class="d-flex justify-content-between">
+                                    <span class="market-label">JPY</span>
+                                    <span style="color: #ec4899; font-weight: bold;">¥</span>
+                                </div>
+                                <div class="market-price">@Model.Market.JpyTry.Price ₺</div>
+                                <span class="change-badge @(Model.Market.JpyTry.IsUp ? "bg-up" : "bg-down")">
+                                    <i class="fa-solid @(Model.Market.JpyTry.IsUp ? "fa-arrow-trend-up" : "fa-arrow-trend-down")"></i> @Model.Market.JpyTry.ChangeRate%
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="market-item">
+                                <div class="d-flex justify-content-between">
+                                    <span class="market-label">BTC</span><span class="text-warning"><i class="fa-brands fa-bitcoin"></i></span>
+                                </div>
+                                <div class="market-price">$@Model.Market.Bitcoin.Price</div>
+                                <span class="change-badge @(Model.Market.Bitcoin.IsUp ? "bg-up" : "bg-down")">
+                                    <i class="fa-solid @(Model.Market.Bitcoin.IsUp ? "fa-arrow-trend-up" : "fa-arrow-trend-down")"></i> @Model.Market.Bitcoin.ChangeRate%
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="market-item">
+                                <div class="d-flex justify-content-between">
+                                    <span class="market-label">ETH</span><span class="text-info"><i class="fa-brands fa-ethereum"></i></span>
+                                </div>
+                                <div class="market-price">$@Model.Market.Ethereum.Price</div>
+                                <span class="change-badge @(Model.Market.Ethereum.IsUp ? "bg-up" : "bg-down")">
+                                    <i class="fa-solid @(Model.Market.Ethereum.IsUp ? "fa-arrow-trend-up" : "fa-arrow-trend-down")"></i> @Model.Market.Ethereum.ChangeRate%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="m-0 fw-bold text-muted text-uppercase" style="font-size: 0.8rem;">Fuel (Antalya)</h6>
+                        <i class="fa-solid fa-gas-pump" style="color: var(--fuel-icon);"></i>
+                    </div>
+
+                    <div class="d-flex flex-column gap-2">
+                        @foreach (var fuel in Model.FuelPrices)
+                        {
+                            <div class="list-row-item p-2">
+                                <span>
+                                    @if (fuel.Name.Contains("Benzin"))
+                                    {
+                                        <i class="fa-solid fa-circle me-2 text-white"></i>
+                                    }
+                                    else if (fuel.Name.Contains("Motorin"))
+                                    {
+                                        <i class="fa-solid fa-circle me-2 text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-solid fa-circle me-2 text-primary"></i>
+                                    }
+                                    @fuel.Name
+                                </span>
+                                <span class="fuel-price-tag">@fuel.Price</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <span class="section-title">Today's Highlights</span>
+
+                <div class="dashboard-card weather-card mb-4">
+                    <i class="fa-solid fa-sun weather-icon-lg"></i>
+                    <div class="row h-100 align-items-center position-relative">
+                        <div class="col-md-7 ps-4">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <i class="fa-solid fa-location-arrow"></i>
+                                <span class="fw-bold text-uppercase" style="letter-spacing: 1px;">Antalya, TR</span>
+                            </div>
+                            <div class="weather-temp">@Model.Temperature°C</div>
+                            <h4 class="mb-4 fw-light">@Model.WeatherCondition</h4>
+
+                            <div class="d-flex gap-4 opacity-75">
+                                <span><i class="fa-solid fa-droplet me-2"></i>45% Nem</span>
+                                <span><i class="fa-solid fa-wind me-2"></i>12 km/s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card chef-card">
+                    <div class="chef-header">
+                        <i class="fa-solid fa-hat-chef"></i>
+                        <span>Chef's Recommendation</span>
+                    </div>
+                    <div class="position-relative">
+                        <p class="dish-desc">
+                            "Bu akşam için önerimiz: <span class="dish-highlight">Ağır Ateşte Pişmiş Kuzu İncik</span>.
+                            Yanında biberiye infüzyonu ve yerel bir Cabernet Sauvignon şarabı ile mükemmel uyum sağlar."
+                        </p>
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=150" class="chef-img" alt="Dish">
+                    </div>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-action w-auto"><i class="fa-regular fa-bell me-2"></i>Mutfak Bildirimi</button>
+                        <button class="btn btn-outline-light border-0 opacity-50 hover-opacity-100">Tarifi Gör</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <span class="section-title">Concierge & Events</span>
+
+                <div class="dashboard-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="m-0 fw-bold">Yerel Keşifler</h5>
+                        <button class="btn btn-sm btn-outline-secondary rounded-pill">Tümü</button>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3">
+                        <div class="list-row-item">
+                            <div class="d-flex align-items-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/D%C3%BCden_waterfalls.jpg/640px-D%C3%BCden_waterfalls.jpg" class="concierge-img" alt="Waterfall">
+                                <div class="concierge-info">
+                                    <h6>Düden Şelalesi</h6>
+                                    <p>Doğa yürüyüşü ve fotoğraf...</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-muted"></i>
+                        </div>
+
+                        <div class="list-row-item">
+                            <div class="d-flex align-items-center">
+                                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/4d/45/ad/kaleiici-old-town-festival.jpg?w=1200&h=-1&s=1" class="concierge-img" alt="Old Town">
+                                <div class="concierge-info">
+                                    <h6>Kaleiçi (Old Town)</h6>
+                                    <p>Tarihi Osmanlı mimarisi...</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-muted"></i>
+                        </div>
+
+                        <div class="list-row-item">
+                            <div class="d-flex align-items-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Konyaalt%C4%B1_Beach_with_mountains.jpg" class="concierge-img" alt="Beach">
+                                <div class="concierge-info">
+                                    <h6>Konyaaltı Plajı</h6>
+                                    <p>Akdeniz manzarası ve deniz...</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-muted"></i>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
+                        <div class="alert alert-success bg-opacity-10 bg-success text-success border-0 mb-0 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-headset"></i>
+                            <div style="font-size: 0.85rem;">Concierge servisi 7/24 aktif.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
