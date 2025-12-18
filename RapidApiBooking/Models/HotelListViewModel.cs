@@ -7,5 +7,5 @@ namespace RapidApiBooking.Models
         public List<HotelItem> Hotels { get; set; } = new List<HotelItem>();
     }
 
-  
+
 }

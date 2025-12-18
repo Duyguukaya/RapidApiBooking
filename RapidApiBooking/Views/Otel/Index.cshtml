@@ -82,35 +82,36 @@
                 <div class="col-lg-12">
                     <form action="/Otel/Rooms" method="get" class="booking-form">
                         <div class="row">
+
                             <div class="col-md-3 d-flex">
-                                <div class="form-group p-4 align-self-stretch d-flex align-items-end">
+                                <div class="form-group p-4 align-self-stretch d-flex align-items-center">
                                     <div class="wrap">
-                                        <label for="#">Gideceğiniz Şehir</label>
-                                        <input type="text" name="city" class="form-control" placeholder="Örn: Antalya" required>
+                                        <label for="#">Şehir</label>
+                                        <input type="text" name="city" class="form-control" placeholder="Örn: Istanbul" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3 d-flex">
-                                <div class="form-group p-4 align-self-stretch d-flex align-items-end">
+                                <div class="form-group p-4 align-self-stretch d-flex align-items-center">
                                     <div class="wrap">
                                         <label for="#">Giriş Tarihi</label>
-                                        <input type="text" name="checkInDate" class="form-control checkin_date" placeholder="Tarih Seçin" required>
+                                        <input type="text" name="checkInDate" class="form-control checkin_date" placeholder="Giriş Tarihi" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3 d-flex">
-                                <div class="form-group p-4 align-self-stretch d-flex align-items-end">
+                                <div class="form-group p-4 align-self-stretch d-flex align-items-center">
                                     <div class="wrap">
                                         <label for="#">Çıkış Tarihi</label>
-                                        <input type="text" name="checkOutDate" class="form-control checkout_date" placeholder="Tarih Seçin" required>
+                                        <input type="text" name="checkOutDate" class="form-control checkout_date" placeholder="Çıkış Tarihi" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3 d-flex">
-                                <div class="form-group p-4 align-self-stretch d-flex align-items-end">
+                                <div class="form-group p-4 align-self-stretch d-flex align-items-center">
                                     <div class="wrap">
                                         <label for="#">Kişi Sayısı</label>
                                         <div class="form-field">
@@ -118,7 +119,7 @@
                                                 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                                                 <select name="adultCount" class="form-control">
                                                     <option value="1">1 Yetişkin</option>
-                                                    <option value="2">2 Yetişkin</option>
+                                                    <option value="2" selected>2 Yetişkin</option>
                                                     <option value="3">3 Yetişkin</option>
                                                     <option value="4">4 Yetişkin</option>
                                                 </select>
@@ -129,10 +130,11 @@
                             </div>
 
                             <div class="col-md-12 d-flex">
-                                <div class="form-group d-flex align-self-stretch w-100">
-                                    <input type="submit" value="Otelleri Listele" class="btn btn-primary py-3 px-4 align-self-stretch w-100">
+                                <div class="form-group d-flex align-self-stretch">
+                                    <input type="submit" value="Otel Ara ve Listele" class="btn btn-primary py-3 px-4 align-self-stretch">
                                 </div>
                             </div>
+
                         </div>
                     </form>
                 </div>

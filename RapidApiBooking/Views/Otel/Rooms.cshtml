@@ -1,4 +1,4 @@
-﻿@model HotelListViewModel
+﻿@model RapidApiBooking.Models.HotelListViewModel
 @{
     Layout = null;
 }
@@ -9,10 +9,8 @@
     <title>Deluxe - Otel Sonuçları</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
-
     <link rel="stylesheet" href="~/deluxe-master/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="~/deluxe-master/css/animate.css">
     <link rel="stylesheet" href="~/deluxe-master/css/owl.carousel.min.css">
@@ -31,9 +29,6 @@
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
             <a class="navbar-brand" href="/Home/Index">Deluxe</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="oi oi-menu"></span> Menü
-            </button>
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a href="/Home/Index" class="nav-link">Ana Sayfa</a></li>
@@ -42,12 +37,12 @@
             </div>
         </div>
     </nav>
+
     <div class="hero-wrap" style="background-image: url('/deluxe-master/images/bg_1.jpg'); background-position: 50% 0%;">
         <div class="overlay"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center">
                 <div class="col-md-9 ftco-animate text-center">
-                    <p class="breadcrumbs"><span class="mr-2"><a href="/Home/Index">Ana Sayfa</a></span> <span>Oteller</span></p>
                     <h1 class="mb-3 bread">Müsait Oteller</h1>
                 </div>
             </div>
@@ -65,13 +60,14 @@
                             {
                                 <div class="col-sm col-md-6 col-lg-4 ftco-animate">
                                     <div class="room">
-                                        <a href="#" class="img d-flex justify-content-center align-items-center" style="background-image: url(@hotel.PhotoUrl);">
+                                        <a href="/Otel/Detail?id=@hotel.HotelId&checkInDate=@hotel.CheckIn&checkOutDate=@hotel.CheckOut" class="img d-flex justify-content-center align-items-center" style="background-image: url(@hotel.PhotoUrl);">
                                             <div class="icon d-flex justify-content-center align-items-center">
                                                 <span class="icon-search2"></span>
                                             </div>
                                         </a>
                                         <div class="text p-3 text-center">
-                                            <h3 class="mb-3"><a href="#">@hotel.Name</a></h3>
+                                            <h3 class="mb-3"><a href="/Otel/Detail?id=@hotel.HotelId&checkInDate=@hotel.CheckIn&checkOutDate=@hotel.CheckOut">@hotel.Name</a></h3>
+
                                             <p><span class="price mr-2">@hotel.Price</span></p>
                                             <ul class="list">
                                                 <li><span>Puan:</span> @hotel.Score</li>
@@ -79,7 +75,7 @@
                                             </ul>
                                             <hr>
                                             <p class="pt-1">
-                                                <a href="/Otel/Detail/@hotel.HotelId" class="btn-custom">
+                                                <a href="/Otel/Detail?id=@hotel.HotelId&checkInDate=@hotel.CheckIn&checkOutDate=@hotel.CheckOut" class="btn-custom">
                                                     Detayları Gör <span class="icon-long-arrow-right"></span>
                                                 </a>
                                             </p>
@@ -92,8 +88,7 @@
                         {
                             <div class="col-md-12 text-center">
                                 <div class="alert alert-warning">
-                                    <h3>Üzgünüz, aradığınız kriterlere uygun otel bulunamadı.</h3>
-                                    <p>Lütfen farklı bir tarih veya şehir deneyiniz.</p>
+                                    <h3>Üzgünüz, otel bulunamadı.</h3>
                                     <a href="/Home/Index" class="btn btn-primary">Yeni Arama Yap</a>
                                 </div>
                             </div>
@@ -103,19 +98,6 @@
             </div>
         </div>
     </section>
-
-    <footer class="ftco-footer ftco-bg-dark ftco-section">
-        <div class="container">
-            <div class="row mb-5">
-                <div class="col-md">
-                    <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2">Deluxe Otel</h2>
-                        <p>Arama Sonuçları Sayfası</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <script src="~/deluxe-master/js/jquery.min.js"></script>
     <script src="~/deluxe-master/js/jquery-migrate-3.0.1.min.js"></script>
@@ -131,6 +113,5 @@
     <script src="~/deluxe-master/js/bootstrap-datepicker.js"></script>
     <script src="~/deluxe-master/js/scrollax.min.js"></script>
     <script src="~/deluxe-master/js/main.js"></script>
-
 </body>
 </html>
