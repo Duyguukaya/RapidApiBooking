@@ -25,63 +25,206 @@
     <link rel="stylesheet" href="~/deluxe-master/css/flaticon.css">
     <link rel="stylesheet" href="~/deluxe-master/css/icomoon.css">
     <link rel="stylesheet" href="~/deluxe-master/css/style.css">
+
+    <style>
+        /* Tema Rengi */
+        :root {
+            --theme-color: #bfa145;
+        }
+
+        /* --- 1. SLIDER DÜZENLEMESİ --- */
+        .slider-wrapper {
+            /* NAVBAR AYARI: Navbar üstte kaldığı için slider'ı aşağı itiyoruz. */
+            padding-top: 110px;
+            padding-bottom: 0px; /* Alt boşluk tamamen sıfırlandı */
+        }
+
+        /* Owl Carousel'in kendi boşluğunu sıfırlama */
+        .home-slider {
+            margin-bottom: 0 !important;
+        }
+
+        .custom-slider-item {
+            height: 550px !important;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 10px 20px -5px rgba(0,0,0,0.2);
+        }
+
+            .custom-slider-item .overlay {
+                border-radius: 15px;
+            }
+
+        /* --- 2. ODA KARTLARI DÜZENLEMESİ --- */
+        .hotel-room-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .hotel-room-card:hover {
+                transform: translateY(-7px);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            }
+
+        .room-card-header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            font-family: "Playfair Display", serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .room-card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .room-features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+            .room-features-list li {
+                margin-bottom: 10px;
+                font-size: 0.95rem;
+                color: #666;
+                display: flex;
+                align-items: center;
+            }
+
+                .room-features-list li span.icon {
+                    color: var(--theme-color);
+                    margin-right: 10px;
+                    font-size: 1.1rem;
+                }
+
+        .room-price-box {
+            margin-top: auto;
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .price-label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .the-price {
+            font-family: "Playfair Display", serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--theme-color);
+            line-height: 1;
+        }
+
+        .the-currency {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .btn-select-room {
+            background-color: var(--theme-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
+            border-radius: 0 0 12px 12px;
+        }
+
+            .btn-select-room:hover {
+                background-color: #a68b3a;
+                color: #fff;
+                text-decoration: none;
+            }
+
+        /* BOŞLUK SIFIRLAMA SINIFI */
+        .no-padding-margin {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="/Otel/Index">Deluxe</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
+            <a class="navbar-brand" href="/Home/Index">Deluxe</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menü
             </button>
+
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a href="/Otel/Index" class="nav-link">Ana Sayfa</a></li>
+                    <li class="nav-item"><a href="/Home/Index" class="nav-link">Ana Sayfa</a></li>
                     <li class="nav-item active"><a href="#" class="nav-link">Otel Detayı</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <section class="home-slider owl-carousel">
-        @if (Model.Photos.Any())
-        {
-            foreach (var photo in Model.Photos)
-            {
-                <div class="slider-item" style="background-image:url('@photo');">
-                    <div class="overlay"></div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="slider-item" style="background-image:url('/deluxe-master/images/bg_1.jpg');">
-                <div class="overlay"></div>
-                <div class="container">
-                    <div class="row slider-text justify-content-center align-items-center">
-                        <div class="col-md-12 text-center">
-                            <h1 class="mb-3">Fotoğraf Bulunamadı</h1>
+    <div class="container slider-wrapper">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <section class="home-slider owl-carousel">
+                    @if (Model.Photos.Any())
+                    {
+                        foreach (var photo in Model.Photos)
+                        {
+                            <div class="slider-item custom-slider-item" style="background-image:url('@photo'); background-size: cover; background-position: center;">
+                                <div class="overlay"></div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="slider-item custom-slider-item" style="background-image:url('/deluxe-master/images/bg_1.jpg'); background-size: cover; background-position: center;">
+                            <div class="overlay"></div>
+                            <div class="container">
+                                <div class="row slider-text justify-content-center align-items-center">
+                                    <div class="col-md-12 text-center">
+                                        <h1 class="mb-3" style="font-size: 2rem;">Fotoğraf Bulunamadı</h1>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                </section>
             </div>
-        }
-    </section>
+        </div>
+    </div>
 
-    <section class="ftco-section">
+    <section class="ftco-section no-padding-margin" style="padding-top: 20px !important;">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-md-10 text-center heading-section ftco-animate">
                     <span class="subheading">Otel Detayları</span>
                     <h2 class="mb-4">Otel Hakkında</h2>
-                    <p class="lead">
+                    <p class="lead text-muted">
                         @Html.Raw(string.IsNullOrWhiteSpace(Model.Description) ? "Bu otel için açıklama bulunamadı." : Model.Description)
                     </p>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
-                    <a href="/Otel/Index" class="btn btn-primary py-3 px-5 mr-2">Diğer Otellere Dön</a>
                 </div>
             </div>
         </div>
@@ -95,31 +238,43 @@
                     <p>Konaklamanız için en uygun odayı seçin.</p>
                 </div>
             </div>
-            <div class="row">
+            <div class="row d-flex">
                 @if (Model.Rooms != null && Model.Rooms.Count > 0)
                 {
                     @foreach (var room in Model.Rooms)
                     {
-                        <div class="col-md-4 ftco-animate">
-                            <div class="block-7">
-                                <div class="text-center p-4">
-                                    <span class="excerpt d-block">@room.Name</span>
-                                    <ul class="pricing-text mb-5">
-                                        <li><span class="price">@room.Price @room.Currency</span></li>
+                        <div class="col-md-4 d-flex ftco-animate mb-4">
+                            <div class="hotel-room-card w-100">
+                                <div class="room-card-header">
+                                    @room.Name
+                                </div>
+                                <div class="room-card-body">
+                                    <ul class="room-features-list">
                                         @if (room.Facilities.Count > 0)
                                         {
-                                            @foreach (var facility in room.Facilities.Take(3))
+                                            @foreach (var facility in room.Facilities.Take(4))
                                             {
-                                                <li><span class="icon-check mr-2"></span>@facility</li>
+                                                <li><span class="icon icon-check-circle"></span>@facility</li>
+                                            }
+                                            if (room.Facilities.Count > 4)
+                                            {
+                                                <li><span class="icon icon-plus-circle" style="font-size: 0.9rem; opacity: 0.7;"></span><small>ve dahası...</small></li>
                                             }
                                         }
                                         else
                                         {
-                                            <li>Standart Özellikler</li>
+                                            <li><span class="icon icon-info-circle"></span>Standart Özellikler</li>
                                         }
                                     </ul>
-                                    <a href="#" class="btn btn-primary d-block px-2 py-3">Seç</a>
+
+                                    <div class="room-price-box">
+                                        <span class="price-label">Gecelik Fiyat</span>
+                                        <div class="the-price">
+                                            @room.Price <span class="the-currency">@room.Currency</span>
+                                        </div>
+                                    </div>
                                 </div>
+                                <a href="#" class="btn btn-select-room text-center">Bu Odayı Seç</a>
                             </div>
                         </div>
                     }
@@ -127,7 +282,11 @@
                 else
                 {
                     <div class="col-md-12 text-center">
-                        <p>Şu an için müsait oda bilgisi çekilemedi veya oda kalmadı.</p>
+                        <div class="alert alert-info p-5 shadow-sm bg-white border-0">
+                            <span class="icon-info-circle d-block mb-3" style="font-size: 3rem; color: var(--theme-color);"></span>
+                            <h4 class="alert-heading">Müsait Oda Bulunamadı</h4>
+                            <p class="mb-0">Lütfen farklı tarihler seçerek tekrar deneyiniz.</p>
+                        </div>
                     </div>
                 }
             </div>
