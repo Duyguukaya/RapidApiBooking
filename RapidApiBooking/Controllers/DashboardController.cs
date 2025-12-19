@@ -14,13 +14,10 @@ namespace RapidApiBooking.Controllers
 {
     public class DashboardController : Controller
     {
-        // ==================================================================================
-        // DİKKAT: Buraya kendi Anthropic API anahtarınızı (sk-ant...) yapıştırmayı unutmayın!
-        // ==================================================================================
-        private const string AnthropicApiKey = "apikey";
+    
+        private const string AnthropicApiKey = "api";
 
-        // RapidAPI Key (Ortak)
-        private const string RapidApiKey = "a7262bfbe1msh650352f9eedc7a1p1ad5dejsn8fec4454c5aa";
+        private const string RapidApiKey = "6a21584928mshc562d2ab2dfb2f2p1140cejsn59e70aaa1733";
 
         public async Task<IActionResult> Index(string city = "Istanbul")
         {
@@ -30,9 +27,6 @@ namespace RapidApiBooking.Controllers
 
             double currentEurRate = 0;
 
-            // =========================================================
-            // 1. DÖVİZ (Frankfurter API)
-            // =========================================================
             try
             {
                 string usdRes = await client.GetStringAsync("https://api.frankfurter.app/latest?from=USD&to=TRY");
@@ -54,9 +48,7 @@ namespace RapidApiBooking.Controllers
             }
             catch { }
 
-            // =========================================================
-            // 2. KRİPTO PARALAR (Coinranking)
-            // =========================================================
+       
             try
             {
                 var requestCrypto = new HttpRequestMessage
@@ -78,11 +70,9 @@ namespace RapidApiBooking.Controllers
                     if (eth != null) model.Market.Ethereum = new MarketItem { Symbol = "ETH", Price = ((double)eth["price"]).ToString("N0", new CultureInfo("en-US")), ChangeRate = Math.Abs((double)eth["change"]).ToString("N2", new CultureInfo("en-US")), IsUp = (double)eth["change"] >= 0 };
                 }
             }
-            catch { /* Hata yönetimi */ }
+            catch { /* Hata olursa boş geç */ }
 
-            // =========================================================
-            // 3. AKARYAKIT (Gas Price)
-            // =========================================================
+   
             model.FuelPrices = new List<FuelItem>();
             try
             {
@@ -114,18 +104,18 @@ namespace RapidApiBooking.Controllers
                             }
                             else
                             {
+                                // Kur çekilemediyse Euro göster
                                 model.FuelPrices.Add(new FuelItem { Name = "Benzin", Price = benzin + " €" });
                                 model.FuelPrices.Add(new FuelItem { Name = "Motorin", Price = motorin + " €" });
+                                if (lpg > 0) model.FuelPrices.Add(new FuelItem { Name = "LPG", Price = lpg + " €" });
                             }
                         }
                     }
                 }
             }
-            catch { /* Hata yönetimi */ }
+            catch { /* Hata olursa boş geç */ }
 
-            // =========================================================
-            // 4. HAVA DURUMU (WeatherAPI)
-            // =========================================================
+         
             try
             {
                 var requestWeather = new HttpRequestMessage
@@ -140,8 +130,17 @@ namespace RapidApiBooking.Controllers
                     var jsonWeather = JObject.Parse(await responseWeather.Content.ReadAsStringAsync());
 
                     model.CityName = jsonWeather["name"]?.ToString() ?? city;
-                    double tempK = (double)(jsonWeather["main"]?["temprature"] ?? 0);
-                    model.Temperature = (tempK - 273.15).ToString("N0");
+
+             
+                    double tempK = 0;
+                    if (jsonWeather["main"]?["temprature"] != null)
+                        tempK = (double)jsonWeather["main"]["temprature"];
+                    else if (jsonWeather["main"]?["temperature"] != null)
+                        tempK = (double)jsonWeather["main"]["temperature"];
+                    else if (jsonWeather["main"]?["temp"] != null)
+                        tempK = (double)jsonWeather["main"]["temp"];
+
+                    model.Temperature = (tempK > 0 ? (tempK - 273.15) : 0).ToString("N0");
                     model.WeatherCondition = jsonWeather["weather"]?[0]?["description"]?.ToString();
                     model.WeatherIcon = jsonWeather["weather"]?[0]?["icon"]?.ToString();
                     model.Humidity = jsonWeather["main"]?["humidity"]?.ToString();
@@ -153,19 +152,12 @@ namespace RapidApiBooking.Controllers
                 model.CityName = city; model.Temperature = "--"; model.WeatherCondition = "Bulunamadı"; model.WeatherIcon = ""; model.Humidity = "--"; model.WindSpeed = "--";
             }
 
-            // =========================================================
-            // 5. CLAUDE AI GEZİ ÖNERİLERİ
-            // =========================================================
+       
             model.TravelRecommendations = await GetClaudeRecommendations(city, client);
 
-            // =========================================================
-            // 6. CLAUDE AI TAM MENÜ (YENİLENMİŞ)
-            // =========================================================
             model.DailyMenu = await GetClaudeFullMenu(client);
 
-            // =========================================================
-            // 7. NULL KONTROLLERİ
-            // =========================================================
+           
             if (model.Market.UsdTry == null) model.Market.UsdTry = new MarketItem { Symbol = "USD", Price = "---", IsUp = true };
             if (model.Market.EurTry == null) model.Market.EurTry = new MarketItem { Symbol = "EUR", Price = "---", IsUp = true };
             if (model.Market.GbpTry == null) model.Market.GbpTry = new MarketItem { Symbol = "GBP", Price = "---", IsUp = true };
@@ -179,9 +171,7 @@ namespace RapidApiBooking.Controllers
             return View(model);
         }
 
-        // --- YARDIMCI METOTLAR ---
-
-        // Gezi Önerileri (Detaylı)
+        
         private async Task<string> GetClaudeRecommendations(string cityName, HttpClient client)
         {
             try
@@ -217,21 +207,13 @@ namespace RapidApiBooking.Controllers
             catch { return ""; }
         }
 
-        // Günün Tam Menüsü (YENİ - JSON Döner)
-        // --- GÜNCELLENMİŞ METOT (Daha Uzun Açıklamalı) ---
         private async Task<List<MenuItem>> GetClaudeFullMenu(HttpClient client)
         {
             var menu = new List<MenuItem>();
             try
             {
-                if (string.IsNullOrEmpty(AnthropicApiKey) || AnthropicApiKey.Contains("BURAYA"))
-                {
-                    return new List<MenuItem> {
-                new MenuItem { Course="Uyarı", Name="API Key Eksik", Description="Lütfen Controller'a anahtarınızı girin." }
-            };
-                }
+                if (string.IsNullOrEmpty(AnthropicApiKey)) return new List<MenuItem>();
 
-                // PROMPT GÜNCELLENDİ: Daha detaylı açıklama istiyoruz
                 string prompt = "Bana bugün akşam yemeği için Türk mutfağından veya Dünya mutfağından birbirine uyumlu 4 çeşit (Çorba, Ana Yemek, Yan Lezzet, Tatlı) harika bir menü hazırla. " +
                                 "Cevabı SADECE aşağıdaki JSON formatında ver, başka hiçbir metin yazma: " +
                                 "[ " +
@@ -244,7 +226,7 @@ namespace RapidApiBooking.Controllers
                 var requestBody = new
                 {
                     model = "claude-3-haiku-20240307",
-                    max_tokens = 800, // Açıklamalar uzayacağı için limiti artırdık
+                    max_tokens = 800,
                     messages = new[] { new { role = "user", content = prompt } }
                 };
 
@@ -271,10 +253,7 @@ namespace RapidApiBooking.Controllers
                     }
                 }
             }
-            catch
-            {
-                // Hata yönetimi
-            }
+            catch { }
             return menu;
         }
     }

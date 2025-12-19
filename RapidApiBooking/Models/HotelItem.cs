@@ -2,7 +2,7 @@
 {
     public class HotelItem
     {
-        public int HotelId { get; set; } // Detay sayfasına gitmek için ID
+        public int HotelId { get; set; } 
         public string Name { get; set; }
         public string PhotoUrl { get; set; }
         public string Price { get; set; }

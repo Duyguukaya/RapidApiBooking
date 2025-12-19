@@ -7,7 +7,7 @@ namespace RapidApiBooking.Controllers
 {
     public class OtelController : Controller
     {
-        private readonly string _apiKey = "6b015b54abmsh649b427a04efa89p1e53dcjsna449b8e8da80";
+        private readonly string _apiKey = "6a21584928mshc562d2ab2dfb2f2p1140cejsn59e70aaa1733";
         private readonly string _apiHost = "booking-com15.p.rapidapi.com";
 
         public IActionResult Index()
