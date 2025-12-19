@@ -20,7 +20,7 @@ Proje, **6 farklı API** servisini ve **Anthropic Claude AI** teknolojisini bir 
 ### 📊 Akıllı Dashboard (Daily Briefing)
 * **🌦️ Canlı Hava Durumu:** Girilen lokasyonun anlık sıcaklık, nem ve rüzgar verileri.
 * **💰 Finans Piyasaları:** * **Döviz:** Dolar, Euro, Sterlin ve Yen kurları (Frankfurter API).
-    * **Kripto:** Bitcoin ve Ethereum anlık fiyatları ve değişim oranları.
+* **Kripto:** Bitcoin ve Ethereum anlık fiyatları ve değişim oranları.
 * **⛽ Akaryakıt Fiyatları:** Türkiye geneli güncel Benzin, Motorin ve LPG fiyatları (TL çevrimli).
 * **🤖 AI Gezi Rehberi:** Gittiğiniz şehirde gezilmesi gereken en popüler yerler, emojili ve detaylı açıklamalarla (Claude AI).
 * **🍽️ AI Şefin Menüsü:** Her gün yenilenen, 4 aşamalı (Çorba, Ana Yemek, Yan Lezzet, Tatlı) tam akşam yemeği menüsü önerisi.
@@ -46,21 +46,24 @@ Bu projede aşağıdaki teknolojiler ve servisler kullanılmıştır:
 
 ## 📸 Ekran Görüntüleri
 
-<table>
-  <tr>
-    <td><b>Dashboard Paneli</b></td>
-    <td><b>Otel Listeleme</b></td>
-  </tr>
-  <tr>
-    <td><img src="https://via.placeholder.com/400x200?text=Dashboard+Screenshot" alt="Dashboard" /></td>
-    <td><img src="https://via.placeholder.com/400x200?text=Otel+Listesi+Screenshot" alt="Hotel List" /></td>
-  </tr>
-</table>
+# Otel Arama Sayfası
+<img width="1898" height="825" alt="Ekran görüntüsü 2025-12-19 143243" src="https://github.com/user-attachments/assets/8e2f56dc-f55e-4d6b-89a7-f07956787531" />
+
+# Oteller
+<img width="1899" height="828" alt="Ekran görüntüsü 2025-12-19 143301" src="https://github.com/user-attachments/assets/0b90e262-de28-452b-bfbd-4241fb2314b4" />
+<img width="1895" height="820" alt="Ekran görüntüsü 2025-12-19 143311" src="https://github.com/user-attachments/assets/3b682416-d6d3-49a7-9e9f-0256c97d07e5" />
+
+# Otel Detay Sayfası
+<img width="1897" height="820" alt="Ekran görüntüsü 2025-12-19 143342" src="https://github.com/user-attachments/assets/98db1724-744b-46d4-972e-9e014a87efb5" />
+<img width="1893" height="813" alt="Ekran görüntüsü 2025-12-19 143352" src="https://github.com/user-attachments/assets/9ca48438-1136-419a-9cba-9825dee74661" />
+<img width="1893" height="813" alt="Ekran görüntüsü 2025-12-19 143405" src="https://github.com/user-attachments/assets/4d2e4c6c-2cb7-408d-84c2-cd2763c105a2" />
+<img width="1888" height="822" alt="Ekran görüntüsü 2025-12-19 143411" src="https://github.com/user-attachments/assets/962c6f62-10f3-4195-8bab-32f1e7431a15" />
+<img width="1892" height="818" alt="Ekran görüntüsü 2025-12-19 143420" src="https://github.com/user-attachments/assets/94ccd23d-c44e-4380-94f0-0830ad5b8e26" />
+<img width="1890" height="821" alt="Ekran görüntüsü 2025-12-19 143433" src="https://github.com/user-attachments/assets/9d967934-03bd-4bd1-b70c-ceed1567be9e" />
 
 
+# Dashboard 
+<img width="1895" height="814" alt="Ekran görüntüsü 2025-12-19 142909" src="https://github.com/user-attachments/assets/a053c293-5779-47e2-9990-c640de92cecd" />
+<img width="1892" height="733" alt="Ekran görüntüsü 2025-12-19 142932" src="https://github.com/user-attachments/assets/5b3f48b6-becb-4bf5-9417-dac0c0115581" />
 
 
-
-
----
-*Geliştirici: [Duygu Kaya](https://github.com/KULLANICI_ADINIZ)*
