@@ -123,9 +123,10 @@
             color: var(--accent-red);
         }
 
-        /* Weather */
+        /* Weather Card Özelleştirmeleri */
         .weather-card {
-            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
             color: white;
             position: relative;
             overflow: hidden;
@@ -136,62 +137,57 @@
             justify-content: center;
         }
 
-        .weather-temp {
-            font-size: 4.5rem;
-            font-weight: 800;
-            line-height: 1;
-            margin-top: 10px;
+        .weather-header {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            border-radius: 16px 16px 0 0;
+            margin: -25px -25px 20px -25px;
         }
 
-        .weather-icon-lg {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            font-size: 8rem;
-            opacity: 0.15;
-            transform: rotate(-10deg);
-        }
-
-        /* Chef */
-        .chef-card {
-            border: 1px solid rgba(52, 211, 153, 0.3);
-            position: relative;
-            background: linear-gradient(180deg, var(--card-dark) 0%, rgba(52, 211, 153, 0.05) 100%);
-        }
-
-        .chef-header {
-            color: var(--accent-green);
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .dish-desc {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #ccc;
-            margin-bottom: 25px;
-            padding-right: 100px;
-        }
-
-        .dish-highlight {
-            color: #fff;
+        .weather-big-temp {
+            font-size: 5rem;
             font-weight: 700;
-            font-style: italic;
+            letter-spacing: -2px;
+            line-height: 1;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .chef-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            position: absolute;
-            right: 25px;
-            top: 60px;
-            border: 3px solid var(--card-dark);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        .weather-stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .weather-stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .weather-stat-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Chef Card Özelleştirmeleri */
+        .chef-card {
+            background: linear-gradient(145deg, #1f2937 0%, #111827 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .chef-quote-box {
+            background: rgba(52, 211, 153, 0.05);
+            border-left: 3px solid var(--accent-green);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #d1d5db;
         }
 
         /* List Items (Fuel & Concierge) */
@@ -223,44 +219,48 @@
             color: #fff;
         }
 
-        /* Concierge Specific */
-        .concierge-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            object-fit: cover;
-            margin-right: 15px;
+        /* Main Search Input */
+        .main-search-input {
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white !important;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
         }
 
-        .concierge-info h6 {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-        }
+            .main-search-input:focus {
+                background-color: rgba(255,255,255,0.1);
+                border-color: var(--accent-green);
+                box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
+            }
 
-        .concierge-info p {
-            margin: 3px 0 0 0;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Buttons */
-        .btn-action {
-            background-color: transparent;
-            color: var(--accent-green);
-            border: 1px solid var(--accent-green);
-            border-radius: 8px;
-            padding: 8px 20px;
-            font-size: 0.9rem;
+        .main-search-btn {
+            background-color: var(--accent-green);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 12px;
+            padding: 0 25px;
             font-weight: 600;
             transition: 0.3s;
         }
 
-            .btn-action:hover {
-                background-color: var(--accent-green);
-                color: #112019;
+            .main-search-btn:hover {
+                background-color: #2dbd89;
+                transform: translateY(-2px);
             }
+
+        /* AI Recommendation Text */
+        .ai-recommendation-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #e0e6e3;
+        }
+
+        /* Placeholder Rengi */
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
     </style>
 </head>
 <body>
@@ -285,6 +285,23 @@
     </nav>
 
     <div class="container-fluid p-4" style="max-width: 1600px;">
+
+        <div class="row mb-4 justify-content-center">
+            <div class="col-lg-6">
+                <form method="get" class="d-flex gap-2">
+                    <input type="text" name="city" class="form-control main-search-input"
+                           placeholder="Hangi şehri keşfetmek istiyorsun? (Örn: Paris, Tokyo)..."
+                           value="@Model.CityName" required>
+                    <button class="btn main-search-btn" type="submit">
+                        <i class="fa-solid fa-paper-plane me-2"></i>Keşfet
+                    </button>
+                </form>
+                <div class="text-center mt-2 text-white opacity-75 small">
+                    <i class="fa-solid fa-circle-info me-1"></i>Bu arama hem hava durumunu, hem gezi önerilerini hem de yemek önerilerini günceller.
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4">
 
             <div class="col-lg-3">
@@ -324,8 +341,7 @@
                         <div class="col-6">
                             <div class="market-item">
                                 <div class="d-flex justify-content-between">
-                                    <span class="market-label">GBP</span>
-                                    <span style="color: #a855f7; font-weight: bold;">£</span>
+                                    <span class="market-label">GBP</span><span style="color: #a855f7; font-weight: bold;">£</span>
                                 </div>
                                 <div class="market-price">@Model.Market.GbpTry.Price ₺</div>
                                 <span class="change-badge @(Model.Market.GbpTry.IsUp ? "bg-up" : "bg-down")">
@@ -337,8 +353,7 @@
                         <div class="col-6">
                             <div class="market-item">
                                 <div class="d-flex justify-content-between">
-                                    <span class="market-label">JPY</span>
-                                    <span style="color: #ec4899; font-weight: bold;">¥</span>
+                                    <span class="market-label">JPY</span><span style="color: #ec4899; font-weight: bold;">¥</span>
                                 </div>
                                 <div class="market-price">@Model.Market.JpyTry.Price ₺</div>
                                 <span class="change-badge @(Model.Market.JpyTry.IsUp ? "bg-up" : "bg-down")">
@@ -419,92 +434,162 @@
             <div class="col-lg-6">
                 <span class="section-title">Today's Highlights</span>
 
-                <div class="dashboard-card weather-card mb-4">
-                    <i class="fa-solid fa-sun weather-icon-lg"></i>
-                    <div class="row h-100 align-items-center position-relative">
-                        <div class="col-md-7 ps-4">
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <i class="fa-solid fa-location-arrow"></i>
-                                <span class="fw-bold text-uppercase" style="letter-spacing: 1px;">Antalya, TR</span>
-                            </div>
-                            <div class="weather-temp">@Model.Temperature°C</div>
-                            <h4 class="mb-4 fw-light">@Model.WeatherCondition</h4>
+                <div class="dashboard-card weather-card mb-4 p-0">
+                    <div class="weather-header d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-white"></i>
+                            <span class="fw-bold text-white text-uppercase h5 m-0">@Model.CityName</span>
+                        </div>
+                    </div>
 
-                            <div class="d-flex gap-4 opacity-75">
-                                <span><i class="fa-solid fa-droplet me-2"></i>45% Nem</span>
-                                <span><i class="fa-solid fa-wind me-2"></i>12 km/s</span>
+                    <div class="p-4 pt-2">
+                        <div class="row align-items-center mb-4">
+                            <div class="col-6 text-center">
+                                @if (!string.IsNullOrEmpty(Model.WeatherIcon))
+                                {
+                                    <img src="@Model.WeatherIcon" alt="icon" style="width: 110px; height: 110px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));">
+                                }
+                                <div class="fw-light text-white opacity-75 mt-1 text-capitalize">@Model.WeatherCondition</div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="weather-big-temp">@Model.Temperature°</div>
+                                <div class="text-white opacity-50 small">Bugün</div>
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <div class="weather-stat-box">
+                                    <i class="fa-solid fa-droplet mb-1 text-info"></i>
+                                    <span class="weather-stat-label">Nem</span>
+                                    <span class="weather-stat-value">%@Model.Humidity</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="weather-stat-box">
+                                    <i class="fa-solid fa-wind mb-1 text-white-50"></i>
+                                    <span class="weather-stat-label">Rüzgar</span>
+                                    <span class="weather-stat-value">@Model.WindSpeed <small>km/s</small></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="weather-stat-box">
+                                    <i class="fa-solid fa-gauge-high mb-1 text-warning"></i>
+                                    <span class="weather-stat-label">Basınç</span>
+                                    <span class="weather-stat-value">1012 <small>hPa</small></span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="dashboard-card chef-card">
-                    <div class="chef-header">
-                        <i class="fa-solid fa-hat-chef"></i>
-                        <span>Chef's Recommendation</span>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2 text-success">
+                            <i class="fa-solid fa-utensils"></i>
+                            <span class="fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Günün Menüsü</span>
+                        </div>
+                        <span class="badge bg-success bg-opacity-25 text-success">AI Chef</span>
                     </div>
-                    <div class="position-relative">
-                        <p class="dish-desc">
-                            "Bu akşam için önerimiz: <span class="dish-highlight">Ağır Ateşte Pişmiş Kuzu İncik</span>.
-                            Yanında biberiye infüzyonu ve yerel bir Cabernet Sauvignon şarabı ile mükemmel uyum sağlar."
-                        </p>
-                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=150" class="chef-img" alt="Dish">
+
+                    <div class="menu-container d-flex flex-column gap-3 mb-3">
+                        @if (Model.DailyMenu != null && Model.DailyMenu.Any())
+                        {
+                            foreach (var item in Model.DailyMenu)
+                            {
+                                <div class="d-flex align-items-start gap-3 p-2 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05);">
+                                    <div class="mt-1" style="min-width: 25px;">
+                                        @if (item.Course.Contains("Çorba"))
+                                        {
+                                            <i class="fa-solid fa-mug-hot text-warning fa-lg"></i>
+                                        }
+                                        else if (item.Course.Contains("Ana"))
+                                        {
+                                            <i class="fa-solid fa-drumstick-bite text-danger fa-lg"></i>
+                                        }
+                                        else if (item.Course.Contains("Tatlı"))
+                                        {
+                                            <i class="fa-solid fa-cookie-bite text-info fa-lg"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa-solid fa-leaf text-success fa-lg"></i>
+                                        }
+                                    </div>
+
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <span class="badge border border-light text-light fw-light opacity-50" style="font-size: 0.6rem;">@item.Course</span>
+                                            <h6 class="mb-0 text-white fw-bold" style="font-size: 0.95rem;">@item.Name</h6>
+                                        </div>
+                                        <p class="mb-0 text-white opacity-75 small" style="line-height: 1.5; font-weight: 300;">
+                                            @item.Description
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted py-3">
+                                <i class="fa-solid fa-fire-burner fa-2x mb-2"></i>
+                                <p>Şef menüyü hazırlıyor...</p>
+                            </div>
+                        }
                     </div>
-                    <div class="d-flex gap-3">
-                        <button class="btn btn-action w-auto"><i class="fa-regular fa-bell me-2"></i>Mutfak Bildirimi</button>
-                        <button class="btn btn-outline-light border-0 opacity-50 hover-opacity-100">Tarifi Gör</button>
+
+                    <div class="d-grid mt-auto">
+                        <button class="btn btn-success fw-bold btn-sm py-2">
+                            <i class="fa-solid fa-rotate me-2"></i>Yeni Menü Oluştur
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-3">
-                <span class="section-title">Concierge & Events</span>
+                <span class="section-title">Concierge & AI Travel</span>
 
                 <div class="dashboard-card h-100">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="m-0 fw-bold">Yerel Keşifler</h5>
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill">Tümü</button>
+                        <h5 class="m-0 fw-bold d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-robot text-accent-green"></i>
+                            @Model.CityName Keşifleri
+                        </h5>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">
+                            AI Powered
+                        </span>
                     </div>
 
                     <div class="d-flex flex-column gap-3">
-                        <div class="list-row-item">
-                            <div class="d-flex align-items-center">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/D%C3%BCden_waterfalls.jpg/640px-D%C3%BCden_waterfalls.jpg" class="concierge-img" alt="Waterfall">
-                                <div class="concierge-info">
-                                    <h6>Düden Şelalesi</h6>
-                                    <p>Doğa yürüyüşü ve fotoğraf...</p>
-                                </div>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-muted"></i>
-                        </div>
+                        @if (!string.IsNullOrEmpty(Model.TravelRecommendations))
+                        {
+                            var recommendations = Model.TravelRecommendations.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        <div class="list-row-item">
-                            <div class="d-flex align-items-center">
-                                <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/4d/45/ad/kaleiici-old-town-festival.jpg?w=1200&h=-1&s=1" class="concierge-img" alt="Old Town">
-                                <div class="concierge-info">
-                                    <h6>Kaleiçi (Old Town)</h6>
-                                    <p>Tarihi Osmanlı mimarisi...</p>
-                                </div>
+                            foreach (var item in recommendations)
+                            {
+                                if (!string.IsNullOrWhiteSpace(item))
+                                {
+                                    <div class="list-row-item p-3" style="background-color: rgba(52, 211, 153, 0.08); align-items: flex-start;">
+                                        <div class="d-flex align-items-center">
+                                            <span class="ai-recommendation-text">@Html.Raw(item)</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted py-4 opacity-50">
+                                <i class="fa-solid fa-map-location-dot fa-3x mb-3"></i>
+                                <p>Bir şehir aratın, yapay zeka sizin için gezilecek yerleri listelesin.</p>
                             </div>
-                            <i class="fa-solid fa-chevron-right text-muted"></i>
-                        </div>
-
-                        <div class="list-row-item">
-                            <div class="d-flex align-items-center">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Konyaalt%C4%B1_Beach_with_mountains.jpg" class="concierge-img" alt="Beach">
-                                <div class="concierge-info">
-                                    <h6>Konyaaltı Plajı</h6>
-                                    <p>Akdeniz manzarası ve deniz...</p>
-                                </div>
-                            </div>
-                            <i class="fa-solid fa-chevron-right text-muted"></i>
-                        </div>
+                        }
                     </div>
 
                     <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
-                        <div class="alert alert-success bg-opacity-10 bg-success text-success border-0 mb-0 d-flex align-items-center gap-2">
-                            <i class="fa-solid fa-headset"></i>
-                            <div style="font-size: 0.85rem;">Concierge servisi 7/24 aktif.</div>
+                        <div class="alert alert-success bg-opacity-10 bg-success text-success border-0 mb-0 d-flex align-items-center gap-2 p-2">
+                            <i class="fa-solid fa-sparkles"></i>
+                            <div style="font-size: 0.75rem; line-height: 1.2;">Öneriler Anthropic Claude AI tarafından anlık olarak oluşturulmuştur.</div>
                         </div>
                     </div>
                 </div>
